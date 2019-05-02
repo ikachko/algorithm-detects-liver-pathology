@@ -9,7 +9,7 @@ class GLRLM:
     def __init__(self, image):
         self.image = image
         self.h, self.w = np.shape(image)
-        self.gray_level = 4
+        self.gray_level = 255
         self.glrlm = None
 
 
@@ -59,19 +59,61 @@ class GLRLM:
 
         return res
 
+#
+# image = np.asarray([
+#     [0, 1, 2, 3],
+#     [0, 2, 3, 3],
+#     [2, 1, 1, 1],
+#     [3, 0, 3, 0]
+# ])
+#
+# gl = GLRLM(image)
+#
+# print(gl.glrlm_0())
+# res = gl.glrlm_0()
+#
+# print("LGRE: ", gl.LGRE(res))
+# print("HGRE: ", gl.HGRE(res))
+# print("GLNU: ", gl.GLNU(res))
 
-image = np.asarray([
-    [0, 1, 2, 3],
-    [0, 2, 3, 3],
-    [2, 1, 1, 1],
-    [3, 0, 3, 0]
-])
+from glcm import GLCM
+from img_reader import IMGReader
 
-gl = GLRLM(image)
+import numpy as np
+import pandas as pd
 
-print(gl.glrlm_0())
-res = gl.glrlm_0()
+PROJECT_PWD = "/Users/ilyakachko/algorithm-detects-liver-pathology"
 
-print("LGRE: ", gl.LGRE(res))
-print("HGRE: ", gl.HGRE(res))
-print("GLNU: ", gl.GLNU(res))
+# PROJECT_PWD = "/Users/ikachko/Diploma/algorithm-detects-liver-pathology/diplom_test"
+
+NORMA_DIR = PROJECT_PWD + "/norma_png/"
+PATHOLOGY_DIR = PROJECT_PWD + "/pathology_png/"
+
+norma_imgs_names, norma_imgs = IMGReader.read_directory(NORMA_DIR)
+pathology_img_names, pathology_imgs = IMGReader.read_directory(PATHOLOGY_DIR)
+
+
+df = pd.DataFrame(columns=['LGRE', 'HGRE', 'GLNU', 'isPatho'])
+for i, img in enumerate(norma_imgs):
+    g = GLRLM(img)
+
+    g_0 = g.glrlm_0()
+    df.loc[i] = [
+        g.LGRE(g_0),
+        g.HGRE(g_0),
+        g.GLNU(g_0),
+        0
+    ]
+
+for i, img in enumerate(pathology_imgs):
+    g = GLRLM(img)
+
+    g_0 = g.glrlm_0()
+    df.loc[i] = [
+        g.LGRE(g_0),
+        g.HGRE(g_0),
+        g.GLNU(g_0),
+        1
+    ]
+df.to_csv('./datasets/glrlm_0.csv')
+print(df.head())
