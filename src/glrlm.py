@@ -12,7 +12,6 @@ class GLRLM:
         self.gray_level = 255
         self.glrlm = None
 
-
     def glrlm_0(self):
         """Vertical run"""
 
@@ -49,13 +48,11 @@ class GLRLM:
         return res
 
     def GLNU(self, glrlm):
-        # res = 0
-        s = glrlm.shape[1]
+        res = 0
 
-        res = sum([sum([g**2 for g in line]) for line in glrlm]) / s
-        # for i in range(glrlm.shape[0]):
-        #     for j in range(glrlm.shape[1]):
-                # res += glrlm[i][j]**2
+        for i in range(glrlm.shape[0]):
+            for j in range(glrlm.shape[1]):
+                res += glrlm[i][j]**2
 
         return res
 
@@ -82,20 +79,25 @@ from img_reader import IMGReader
 import numpy as np
 import pandas as pd
 
-PROJECT_PWD = "/Users/ilyakachko/algorithm-detects-liver-pathology"
+HOME_PROJECT_PWD = "/Users/ilyakachko/algorithm-detects-liver-pathology"
 
-# PROJECT_PWD = "/Users/ikachko/Diploma/algorithm-detects-liver-pathology/diplom_test"
+UNIT_PROJECT_PWD = "/Volumes/Storage/goinfre/ikachko/algorithm-detects-liver-pathology"
 
-NORMA_DIR = PROJECT_PWD + "/norma_png/"
-PATHOLOGY_DIR = PROJECT_PWD + "/pathology_png/"
+# NORMA_DIR = HOME_PROJECT_PWD + "/norma_png/"
+# PATHOLOGY_DIR = HOME_PROJECT_PWD + "/pathology_png/"
+
+NORMA_DIR = UNIT_PROJECT_PWD + "/norma_png/"
+PATHOLOGY_DIR = UNIT_PROJECT_PWD + "/pathology_png/"
 
 norma_imgs_names, norma_imgs = IMGReader.read_directory(NORMA_DIR)
 pathology_img_names, pathology_imgs = IMGReader.read_directory(PATHOLOGY_DIR)
 
+print("{} norma images.".format(len(norma_imgs)))
+print("{} patho images.".format(len(pathology_imgs)))
 
 df = pd.DataFrame(columns=['LGRE', 'HGRE', 'GLNU', 'isPatho'])
-for i, img in enumerate(norma_imgs):
-    g = GLRLM(img)
+for i, n_img in enumerate(norma_imgs):
+    g = GLRLM(n_img)
 
     g_0 = g.glrlm_0()
     df.loc[i] = [
@@ -105,15 +107,15 @@ for i, img in enumerate(norma_imgs):
         0
     ]
 
-for i, img in enumerate(pathology_imgs):
-    g = GLRLM(img)
+for i, p_img in enumerate(pathology_imgs):
+    g = GLRLM(p_img)
 
     g_0 = g.glrlm_0()
-    df.loc[i] = [
+    df.loc[i + len(norma_imgs)] = [
         g.LGRE(g_0),
         g.HGRE(g_0),
         g.GLNU(g_0),
         1
     ]
-df.to_csv('./datasets/glrlm_0.csv')
+df.to_csv('./datasets/glrlm_0_unit.csv')
 print(df.head())
