@@ -73,117 +73,117 @@ class GLRLM:
 # print("HGRE: ", gl.HGRE(res))
 # print("GLNU: ", gl.GLNU(res))
 
-from glcm import GLCM
-from img_reader import IMGReader
-
-import numpy as np
-import pandas as pd
-
-HOME_PROJECT_PWD = "/Users/ilyakachko/algorithm-detects-liver-pathology"
-
-UNIT_PROJECT_PWD = "/Volumes/Storage/goinfre/ikachko/algorithm-detects-liver-pathology"
-
-# NORMA_DIR = HOME_PROJECT_PWD + "/norma_png/"
-# PATHOLOGY_DIR = HOME_PROJECT_PWD + "/pathology_png/"
-
-NORMA_DIR = UNIT_PROJECT_PWD + "/images/norma_png/"
-PATHOLOGY_DIR = UNIT_PROJECT_PWD + "/images/"
-
-norma_imgs_names, norma_imgs = IMGReader.read_directory(NORMA_DIR)
-pathology_img_names, pathology_imgs = IMGReader.read_directory(PATHOLOGY_DIR)
-
-# Discholia
-dsh_img_names, dsh_img = IMGReader.read_directory(PATHOLOGY_DIR + "/dsh/")
-
-# Hepatitis B
-gpb_img_names, gpb_img = IMGReader.read_directory(PATHOLOGY_DIR + "/gpb/")
-
-# Hepatitis C
-gpc_img_names, gpc_img = IMGReader.read_directory(PATHOLOGY_DIR + "/gpc/")
-
-# Wilson's disease
-vls_img_names, vls_img = IMGReader.read_directory(PATHOLOGY_DIR + "/vls/")
-
-# Autoimmune hepatitis
-auh_img_names, auh_img = IMGReader.read_directory(PATHOLOGY_DIR + "/vls/")
-
-print("{} norma images.".format(len(norma_imgs)))
-print("{} patho images.".format(len(pathology_imgs)))
-
-df = pd.DataFrame(columns=['LGRE', 'HGRE', 'GLNU', 'isPatho'])
-
-i = 0
-for n_img in norma_imgs:
-    g = GLRLM(n_img)
-
-    g_0 = g.glrlm_0()
-    df.loc[i] = [
-        g.LGRE(g_0),
-        g.HGRE(g_0),
-        g.GLNU(g_0),
-        0
-    ]
-    i += 1
-
-for img in dsh_img:
-    g = GLRLM(img)
-
-    g_0 = g.glrlm_0()
-    df.loc[i] = [
-        g.LGRE(g_0),
-        g.HGRE(g_0),
-        g.GLNU(g_0),
-        1
-    ]
-    i += 1
-
-for img in gpb_img:
-    g = GLRLM(img)
-
-    g_0 = g.glrlm_0()
-    df.loc[i] = [
-        g.LGRE(g_0),
-        g.HGRE(g_0),
-        g.GLNU(g_0),
-        2
-    ]
-    i += 1
-
-for img in gpc_img:
-    g = GLRLM(img)
-
-    g_0 = g.glrlm_0()
-    df.loc[i] = [
-        g.LGRE(g_0),
-        g.HGRE(g_0),
-        g.GLNU(g_0),
-        3
-    ]
-    i += 1
-
-for img in vls_img:
-    g = GLRLM(img)
-
-    g_0 = g.glrlm_0()
-    df.loc[i] = [
-        g.LGRE(g_0),
-        g.HGRE(g_0),
-        g.GLNU(g_0),
-        4
-    ]
-    i += 1
-
-for img in auh_img:
-    g = GLRLM(img)
-
-    g_0 = g.glrlm_0()
-    df.loc[i] = [
-        g.LGRE(g_0),
-        g.HGRE(g_0),
-        g.GLNU(g_0),
-        5
-    ]
-    i += 1
-
-df.to_csv('./datasets/glrlm_0_sep_diseases.csv')
-print(df.head())
+# from glcm import GLCM
+# from img_reader import IMGReader
+#
+# import numpy as np
+# import pandas as pd
+#
+# HOME_PROJECT_PWD = "/Users/ilyakachko/algorithm-detects-liver-pathology"
+#
+# UNIT_PROJECT_PWD = "/Volumes/Storage/goinfre/ikachko/algorithm-detects-liver-pathology"
+#
+# # NORMA_DIR = HOME_PROJECT_PWD + "/norma_png/"
+# # PATHOLOGY_DIR = HOME_PROJECT_PWD + "/pathology_png/"
+#
+# NORMA_DIR = UNIT_PROJECT_PWD + "/images/norma_png/"
+# PATHOLOGY_DIR = UNIT_PROJECT_PWD + "/images/"
+#
+# norma_imgs_names, norma_imgs = IMGReader.read_directory(NORMA_DIR)
+# pathology_img_names, pathology_imgs = IMGReader.read_directory(PATHOLOGY_DIR)
+#
+# # Discholia
+# dsh_img_names, dsh_img = IMGReader.read_directory(PATHOLOGY_DIR + "/dsh/")
+#
+# # Hepatitis B
+# gpb_img_names, gpb_img = IMGReader.read_directory(PATHOLOGY_DIR + "/gpb/")
+#
+# # Hepatitis C
+# gpc_img_names, gpc_img = IMGReader.read_directory(PATHOLOGY_DIR + "/gpc/")
+#
+# # Wilson's disease
+# vls_img_names, vls_img = IMGReader.read_directory(PATHOLOGY_DIR + "/vls/")
+#
+# # Autoimmune hepatitis
+# auh_img_names, auh_img = IMGReader.read_directory(PATHOLOGY_DIR + "/vls/")
+#
+# print("{} norma images.".format(len(norma_imgs)))
+# print("{} patho images.".format(len(pathology_imgs)))
+#
+# df = pd.DataFrame(columns=['LGRE', 'HGRE', 'GLNU', 'isPatho'])
+#
+# i = 0
+# for n_img in norma_imgs:
+#     g = GLRLM(n_img)
+#
+#     g_0 = g.glrlm_0()
+#     df.loc[i] = [
+#         g.LGRE(g_0),
+#         g.HGRE(g_0),
+#         g.GLNU(g_0),
+#         0
+#     ]
+#     i += 1
+#
+# for img in dsh_img:
+#     g = GLRLM(img)
+#
+#     g_0 = g.glrlm_0()
+#     df.loc[i] = [
+#         g.LGRE(g_0),
+#         g.HGRE(g_0),
+#         g.GLNU(g_0),
+#         1
+#     ]
+#     i += 1
+#
+# for img in gpb_img:
+#     g = GLRLM(img)
+#
+#     g_0 = g.glrlm_0()
+#     df.loc[i] = [
+#         g.LGRE(g_0),
+#         g.HGRE(g_0),
+#         g.GLNU(g_0),
+#         2
+#     ]
+#     i += 1
+#
+# for img in gpc_img:
+#     g = GLRLM(img)
+#
+#     g_0 = g.glrlm_0()
+#     df.loc[i] = [
+#         g.LGRE(g_0),
+#         g.HGRE(g_0),
+#         g.GLNU(g_0),
+#         3
+#     ]
+#     i += 1
+#
+# for img in vls_img:
+#     g = GLRLM(img)
+#
+#     g_0 = g.glrlm_0()
+#     df.loc[i] = [
+#         g.LGRE(g_0),
+#         g.HGRE(g_0),
+#         g.GLNU(g_0),
+#         4
+#     ]
+#     i += 1
+#
+# for img in auh_img:
+#     g = GLRLM(img)
+#
+#     g_0 = g.glrlm_0()
+#     df.loc[i] = [
+#         g.LGRE(g_0),
+#         g.HGRE(g_0),
+#         g.GLNU(g_0),
+#         5
+#     ]
+#     i += 1
+#
+# df.to_csv('./datasets/glrlm_0_sep_diseases.csv')
+# print(df.head())
