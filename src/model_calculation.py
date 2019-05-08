@@ -2,8 +2,8 @@ import sys
 import numpy as np
 import pickle
 
-from img_reader import IMGReader
-from glrlm import GLRLM
+from .img_reader import IMGReader
+from .glrlm import GLRLM
 from sklearn import svm
 from sklearn.externals import joblib
 
@@ -61,7 +61,6 @@ def calculate_predictions(img_arr):
     models = load_models()
     features = get_features(img_arr)
 
-    # print(features)
     predictions = []
 
     for i, model in enumerate(models):
@@ -82,39 +81,43 @@ def labeled_predictions(predictions):
     }
 
 def print_sorted_predictions(predictions):
+    #
+    # first_max = -1
+    # first_disease = None
+    #
+    # indexed_predictions = []
+    # for p in predictions:
+    #     indexed_predictions.append()
+    #
+    # predictions = [predictions[i][0] + [i] for i in range(len(predictions))]
+    # predictions = list(enumerate(predictions))
+    # n = len(predictions)
+    #
+    # print(predictions)
+    # for i in range(n):
+    #     for j in range(0, n - i - 1):
+    #         if predictions[j][0] > predictions[j + 1][0]:
+    #             predictions[j][0], predictions[j + 1][0] = predictions[j + 1][0], predictions[j][0]
+    #
+    #
+    # # predictions = [predictions[i][0:-1] for i in range(len(predictions))]
+    # print(predictions)
+    # for i, pred in enumerate(predictions):
+    #     print("[{}] {}: True {}%, False {}%".format(
+    #         i,
+    #         diseases[i],
+    #         int(pred[0][0] * 100),
+    #         int(pred[0][1] * 100)
+    #     ))
     pass
+
 
 
 def pretty_print_labeled_predictions(labeled_predictions):
 
-    # diseases = labeled_predictions
-    # for i in range(len(labeled_predictions)):
-    #     print("{}: True {}, False {}".format(
-    #         ,
-    #         labeled_predictions[pred][0],
-    #         labeled_predictions[pred][1]
-    #     ))
-    # print(labeled_predictions)
     for pred in labeled_predictions:
-        print("{}: True {}, False {}".format(
+        print("{}: True {}%, False {}%".format(
             pred,
-            labeled_predictions[pred][0][0],
-            labeled_predictions[pred][0][1]
+            int(labeled_predictions[pred][0][0] * 100),
+            int(labeled_predictions[pred][0][1] * 100)
         ))
-
-def main():
-    if len(sys.argv) != 2:
-        print("Wrong number of arguments")
-        return
-
-    img_path = sys.argv[1]
-
-    img_arr = IMGReader.read_image(img_path)
-
-    predictions = calculate_predictions(img_arr)
-
-    pretty_print_labeled_predictions(labeled_predictions(predictions))
-
-
-if __name__ == "__main__":
-    main()
