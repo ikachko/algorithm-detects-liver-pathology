@@ -2,8 +2,8 @@ import sys
 import numpy as np
 import pickle
 
-from .img_reader import IMGReader
-from .glrlm import GLRLM
+from src.img_reader import IMGReader
+from src.glrlm import GLRLM
 from sklearn import svm
 from sklearn.externals import joblib
 
@@ -12,19 +12,23 @@ from sklearn.externals import joblib
 import pandas as pd
 
 model_files = [
-    './models/svm_norma_dsh.pkl',
-    './models/svm_norma_gpb.pkl',
-    './models/svm_norma_gpc.pkl',
-    './models/svm_norma_vls.pkl',
-    './models/svm_norma_auh.pkl'
+    './models/svm/svm_norma_dsh.pkl',
+    './models/svm/svm_norma_gpb.pkl',
+    './models/svm/svm_norma_gpc.pkl',
+    './models/svm/svm_norma_vls.pkl',
+    './models/svm/svm_norma_auh.pkl'
 ]
 
-pickle_model_files = [
-    './models/svm_norma_dsh.sav',
-    './models/svm_norma_gpb.sav',
-    './models/svm_norma_gpc.sav',
-    './models/svm_norma_vls.sav',
-    './models/svm_norma_auh.sav'
+svm_model_files = [
+    './models/svm/svm_norma_dsh.sav',
+    './models/svm/svm_norma_gpb.sav',
+    './models/svm/svm_norma_gpc.sav',
+    './models/svm/svm_norma_vls.sav',
+    './models/svm/svm_norma_auh.sav'
+]
+
+xgb_model_files = [
+
 ]
 
 diseases = [
@@ -35,12 +39,18 @@ diseases = [
     'Autoimmune Hepatitis'
 ]
 
-def load_models():
+def load_models(model='svm'):
 
     models_arr = []
 
+    model_files = None
+    if model == 'svm':
+        model_files = svm_model_files
+    else:
+        model_files = xgb_model_files
+
     for i in range(len(model_files)):
-        models_arr.append(pickle.load(open(pickle_model_files[i], 'rb')))
+        models_arr.append(pickle.load(open(model_files[i], 'rb')))
 
     return models_arr
 

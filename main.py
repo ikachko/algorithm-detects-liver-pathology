@@ -1,5 +1,5 @@
 import sys
-from src.img_reader import IMGReader
+from src.img_reader import *
 from src.model_calculation import *
 
 def main():
@@ -13,6 +13,7 @@ def main():
 
     predictions = calculate_predictions(img_arr)
 
+    print(img_path.split('/')[-1])
     pretty_print_labeled_predictions(labeled_predictions(predictions))
 
     # print_sorted_predictions(predictions)
