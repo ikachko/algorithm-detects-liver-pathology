@@ -1,42 +1,53 @@
-import sys
 import numpy as np
 import pickle
+import nrrd
 
-from src.img_reader import IMGReader
-from src.glrlm import GLRLM
-from sklearn import svm
-from sklearn.externals import joblib
+import radiomics
+from radiomics import featureextractor
 
+radiomics.setVerbosity(40)
+
+important_features = [
+    'original_glrlm_GrayLevelNonUniformity',
+    'original_glrlm_GrayLevelNonUniformityNormalized',
+    'original_glrlm_GrayLevelVariance',
+    'original_glrlm_LongRunHighGrayLevelEmphasis',
+    'original_glrlm_LongRunLowGrayLevelEmphasis',
+    'original_glrlm_RunEntropy',
+    'original_glrlm_RunLengthNonUniformity',
+    'original_glrlm_ShortRunEmphasis'
+]
 
 
 import pandas as pd
 
 model_files = [
-    './models/svm/svm_norma_dsh.pkl',
-    './models/svm/svm_norma_gpb.pkl',
-    './models/svm/svm_norma_gpc.pkl',
-    './models/svm/svm_norma_vls.pkl',
-    './models/svm/svm_norma_auh.pkl'
+    './data/models/svm_norma_dsh.pkl',
+    './data/models/svm_norma_gpb.pkl',
+    './data/models/svm_norma_gpc.pkl',
+    './data/models/svm_norma_vls.pkl',
+    './data/models/svm_norma_auh.pkl'
 ]
 
 svm_model_files = [
-    './models/svm/svm_norma_dsh.sav',
-    './models/svm/svm_norma_gpb.sav',
-    './models/svm/svm_norma_gpc.sav',
-    './models/svm/svm_norma_vls.sav',
-    './models/svm/svm_norma_auh.sav'
+    './data/models/svm_norma_dsh.sav',
+    './data/models/svm_norma_gpb.sav',
+    './data/models/svm_norma_gpc.sav',
+    './data/models/svm_norma_vls.sav',
+    './data/models/svm_norma_auh.sav'
 ]
 
 xgb_model_files = [
-
+    './data/models/xgb_glrlm.pickle.dat'
 ]
 
 diseases = [
+    'Norma',
+    'Autoimmune Hepatitis',
     'Dyscholia',
     'Hepatitis B',
     'Hepatitis C',
-    'Wilson\'s Disease',
-    'Autoimmune Hepatitis'
+    'Wilson\'s Disease'
 ]
 
 def load_models(model='svm'):
@@ -55,32 +66,63 @@ def load_models(model='svm'):
     return models_arr
 
 
+# def get_features(img_arr):
+#     glrlm = GLRLM(img_arr)
+#
+#     glrlm0 = glrlm.glrlm_0()
+#
+#     return np.asarray([
+#         glrlm.LGRE(glrlm0),
+#         glrlm.HGRE(glrlm0),
+#         glrlm.GLNU(glrlm0)
+#     ])
+
+
 def get_features(img_arr):
-    glrlm = GLRLM(img_arr)
 
-    glrlm0 = glrlm.glrlm_0()
+    data = list()
 
-    return np.asarray([
-        glrlm.LGRE(glrlm0),
-        glrlm.HGRE(glrlm0),
-        glrlm.GLNU(glrlm0)
-    ])
+    image = img_arr[..., np.newaxis]
+    label = np.ones(shape=image.shape)
+
+    extractor = featureextractor.RadiomicsFeatureExtractor()
+
+
+    extractor.disableAllFeatures()
+    extractor.enableFeatureClassByName('firstorder')
+    extractor.enableFeatureClassByName('glcm')
+    extractor.enableFeatureClassByName('glrlm')
+    extractor.enableFeatureClassByName('ngtdm')
+    extractor.enableFeatureClassByName('gldm')
+
+
+    image_path_to = './tmp/tmp_img.nrrd'
+    label_path_to = './tmp/tmp_label.nrrd'
+
+    nrrd.write(image_path_to, image)
+    nrrd.write(label_path_to, label)
+
+    result = extractor.execute(image_path_to, label_path_to)
+
+    data.append(result)
+
+    df = pd.DataFrame(data, dtype=np.float)
+
+    return df[important_features]
 
 
 def calculate_predictions(img_arr):
-    models = load_models()
+    models = load_models(model='xgb')
     features = get_features(img_arr)
 
-    predictions = []
+    # for i, model in enumerate(models):
+    #     prediction = model.predict_proba(features)
+    #
+    #     predictions.append(
+    #         prediction
+    #     )
 
-    for i, model in enumerate(models):
-        prediction = model.predict_proba([features])
-
-        predictions.append(
-            prediction
-        )
-
-    return predictions
+    return models[0].predict_proba(features)
 
 
 def labeled_predictions(predictions):
@@ -122,6 +164,13 @@ def print_sorted_predictions(predictions):
     pass
 
 
+def pretty_print_proba_pred(predictions):
+    # print(predictions[0])
+    for i, pred in enumerate(predictions[0]):
+        print("{}: {}%".format(
+            diseases[i],
+            int(pred * 100)
+        ))
 
 def pretty_print_labeled_predictions(labeled_predictions):
 

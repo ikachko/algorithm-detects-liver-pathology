@@ -3,6 +3,7 @@ import nrrd
 import numpy as np
 import pandas as pd
 
+from utils import nostdout
 from img_reader import IMGReader
 from scipy.ndimage import filters
 from radiomics import featureextractor
@@ -131,49 +132,58 @@ median_filer_imgs = [
 # df = pd.DataFrame(data_array)
 # df.to_csv(os.getcwd() + '/data/datasets/' + 'pyradiomics_features_gaussian_filter.csv', sep=';')
 
-data_array = list()
-
-for i in range(len(folderNames)):
-    size = len(median_filer_imgs[i])
-    for j in range(size):
-        image = median_filer_imgs[i][j]
-
-        # Add 1 additional axis for future Radiomics processing
-        image = image[..., np.newaxis]
-        label = np.ones(shape=image.shape)
-
-        # Declare destination of the data
-        folder = os.getcwd() + "/data/images/nrrd/median_filter/" + folderNames[i]
-
-        create_directory(folder)
-
-        name_image = folderNames[i] + "_image_" + str(j) + ".nrrd"
-        name_label = folderNames[i] + "_label_" + str(j) + ".nrrd"
-        image_path_to = folder + sl + name_image
-        label_path_to = folder + sl + name_label
-
-        # Save the image as NRRD
-        nrrd.write(image_path_to, image)
-        nrrd.write(label_path_to, label)
-
-        # Instantiate the extractor
-        extractor = featureextractor.RadiomicsFeatureExtractor()
-        extractor.disableAllFeatures()
-        extractor.enableFeatureClassByName('firstorder')
-        extractor.enableFeatureClassByName('glcm')
-        extractor.enableFeatureClassByName('glrlm')
-        extractor.enableFeatureClassByName('ngtdm')
-        extractor.enableFeatureClassByName('gldm')
-
-        result = extractor.execute(image_path_to, label_path_to)
-        result['data_source'] = folderNames[i] + str(j)
-        result['diagnosis_code'] = i
-        # for key, value in result.items():
-        #    print(key, ":", value)
-        data_array.append(result)
-
-df = pd.DataFrame(data_array)
-df.to_csv(os.getcwd() + '/data/datasets/' + 'pyradiomics_features_median_filter.csv', sep=';')
+# data_array = list()
+#
+# for i in range(len(folderNames)):
+#     size = len(median_filer_imgs[i])
+#     for j in range(size):
+#         image = median_filer_imgs[i][j]
+#
+#         # Add 1 additional axis for future Radiomics processing
+#         image = image[..., np.newaxis]
+#         label = np.ones(shape=image.shape)
+#
+#         # Declare destination of the data
+#         folder = os.getcwd() + "/data/images/nrrd/median_filter/" + folderNames[i]
+#
+#         create_directory(folder)
+#
+#         name_image = folderNames[i] + "_image_" + str(j) + ".nrrd"
+#         name_label = folderNames[i] + "_label_" + str(j) + ".nrrd"
+#         image_path_to = folder + sl + name_image
+#         label_path_to = folder + sl + name_label
+#
+#         # Save the image as NRRD
+#         nrrd.write(image_path_to, image)
+#         nrrd.write(label_path_to, label)
+#
+#         # Instantiate the extractor
+#         extractor = featureextractor.RadiomicsFeatureExtractor()
+#         extractor.disableAllFeatures()
+#         extractor.enableFeatureClassByName('firstorder')
+#         extractor.enableFeatureClassByName('glcm')
+#         extractor.enableFeatureClassByName('glrlm')
+#         extractor.enableFeatureClassByName('ngtdm')
+#         extractor.enableFeatureClassByName('gldm')
+#
+#         # with nostdout():
+#         import sys
+#         import io
+#
+#         save_stdout = sys.stdout
+#         sys.stdout = io.BytesIO()
+#         result = extractor.execute(image_path_to, label_path_to)
+#         sys.stdout = save_stdout
+#
+#
+#         result['data_source'] = folderNames[i] + str(j)
+#         result['diagnosis_code'] = i
+#         # for key, value in result.items():
+#         #    print(key, ":", value)
+#         data_array.append(result)
+#
+# df = pd.DataFrame(data_array)
+# df.to_csv(os.getcwd() + '/data/datasets/' + 'pyradiomics_features_median_filter.csv', sep=';')
 
 
 
