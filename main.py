@@ -4,6 +4,8 @@ import os
 from src.img_reader import *
 from src.model_calculation import *
 
+
+
 def main():
     if len(sys.argv) != 2:
         print("Wrong number of arguments")
