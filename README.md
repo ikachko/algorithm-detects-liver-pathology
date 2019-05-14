@@ -2,7 +2,7 @@
 
 This is a my Bachelor Diploma work at Igor Sikorsky Kyiv Polytechnic Institute.
 
-I have trained models on SVM for each disease images.
+I have trained models on XGBoost for each disease images.
 
 Available diseases images:
 
