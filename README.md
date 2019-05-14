@@ -48,14 +48,87 @@ python3 main.py image.png
 
 ## Examples
 
+These are examples of Gradient Boosting model probability prediction
+
+#### Norma
 ```python
-python3 main.py images/auh/2.png
+python3 main.py data/images/png/norm/norma0.png
+```
+```
+Norma: 98%
+Autoimmune Hepatitis: 0%
+Dyscholia: 0%
+Hepatitis B: 0%
+Hepatitis C: 0%
+Wilson's Disease: 0%
+```
+
+#### Dyscholia
+```python
+python3 main.py data/images/png/dsh/4.png
+```
+```
+Norma: 2%
+Autoimmune Hepatitis: 3%
+Dyscholia: 85%
+Hepatitis B: 2%
+Hepatitis C: 2%
+Wilson's Disease: 2%
+```
+
+#### Autoimmune Hepatitis
+
+```python
+python3 main.py data/images/png/auh/6.png
+```
+```
+Norma: 1%
+Autoimmune Hepatitis: 92%
+Dyscholia: 1%
+Hepatitis B: 0%
+Hepatitis C: 1%
+Wilson's Disease: 1%
+```
+
+#### Hepatitis B
+
+```python
+python3 main.py data/images/png/hpb/1.png
 ```
 
 ```
-Dyscholia: True 92%, False 7%
-Hepatitis B: True 88%, False 11%
-Hepatitis C: True 90%, False 9%
-Wilson's Disease: True 93%, False 6%
-Autoimmune Hepatitis: True 95%, False 4%
+Norma: 15%
+Autoimmune Hepatitis: 0%
+Dyscholia: 0%
+Hepatitis B: 83%
+Hepatitis C: 0%
+Wilson's Disease: 0%
+```
+
+#### Hepatitis C
+
+```python
+python3 main.py data/images/png/hpc/1.png
+```
+```
+Norma: 0%
+Autoimmune Hepatitis: 2%
+Dyscholia: 0%
+Hepatitis B: 0%
+Hepatitis C: 94%
+Wilson's Disease: 3%
+```
+
+#### Wilson's Disease
+
+```python
+python3 main.py data/images/png/wls/8.png
+```
+```
+Norma: 5%
+Autoimmune Hepatitis: 1%
+Dyscholia: 0%
+Hepatitis B: 0%
+Hepatitis C: 1%
+Wilson's Disease: 90%
 ```
