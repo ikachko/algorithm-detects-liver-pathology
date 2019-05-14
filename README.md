@@ -28,13 +28,13 @@ GLCM Accuracy:
 
 | Dataset   | Predictor  | Accuracy |
 | --------- | ---------- | -------- |
-| GLCM_0    | XDGBoost   | 50-60%      |
+| GLCM_0    | XGBoost   | 50-60%      |
 
 GLRLM Accuracy on Binary Classification:
 
 | Dataset    | Predictor   | Accuracy |
 | ---------  | ----------  | -------- |
-| GLRLM_0    | XDGBoost    | 88-96%   |
+| GLRLM_0    | XGBoost    | 88-96%   |
 | GLRLM_0    | LogisticReg | 85-95%   |
 | GLRLM_0    | SVM         | 86-93%   |
 | GLRLM_0    | KNN         | 86-93%   |
